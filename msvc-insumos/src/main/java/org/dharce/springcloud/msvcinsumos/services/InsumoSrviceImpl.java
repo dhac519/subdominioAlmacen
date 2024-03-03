@@ -33,4 +33,7 @@ public class InsumoSrviceImpl implements InsumoService{
     public void eliminar(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public Optional<Insumo> porNombre(String name) {return repository.findByName(name);}
 }

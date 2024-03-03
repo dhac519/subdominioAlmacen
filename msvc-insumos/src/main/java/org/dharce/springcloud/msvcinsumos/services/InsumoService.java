@@ -10,4 +10,6 @@ public interface InsumoService {
     Optional<Insumo> porId(Long id);
     Insumo guardar(Insumo articulo);
     void eliminar(Long id);
+
+    Optional<Insumo> porNombre(String name);
 }
