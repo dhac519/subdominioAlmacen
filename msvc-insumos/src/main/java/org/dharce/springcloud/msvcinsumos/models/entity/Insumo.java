@@ -1,28 +1,20 @@
 package org.dharce.springcloud.msvcinsumos.models.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-
+@Entity
+@Table(name = "insumos")
 public class Insumo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
-    @Column(unique = true)
     private String name;
-    @NotNull
-    @DecimalMin(value = "0.0")
-    private Double price;
-    @NotNull
-    @PositiveOrZero
-    private Integer stock;
-
+    private Integer cantidad;
+    private String unidad;
 
     public Long getId() {
         return id;
@@ -40,19 +32,19 @@ public class Insumo {
         this.name = name;
     }
 
-    public Double getPrice() {
-        return price;
+    public Integer getCantidad() {
+        return cantidad;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
-    public Integer getStock() {
-        return stock;
+    public String getUnidad() {
+        return unidad;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
     }
 }

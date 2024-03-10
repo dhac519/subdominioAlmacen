@@ -56,8 +56,8 @@ public class InsumoController {
                 return ResponseEntity.badRequest().body(Collections.singletonMap("Ups !!!", "Ya Existe ese Insumo"));
             }
             insumoDB.setName(insumo.getName());
-            insumoDB.setPrice(insumo.getPrice());
-            insumoDB.setStock(insumo.getStock());
+            insumoDB.setCantidad(insumo.getCantidad());
+            insumoDB.setUnidad(insumo.getUnidad());
 
             return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(insumoDB));
         }else{
