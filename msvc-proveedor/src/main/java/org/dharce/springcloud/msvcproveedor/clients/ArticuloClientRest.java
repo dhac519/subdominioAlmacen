@@ -15,4 +15,5 @@ public interface ArticuloClientRest {
 
     @GetMapping("/articulo-por-proveedor")
     List<Articulo> obtenerArticuloPorProveedor(@RequestParam Iterable<Long> ids);
+
 }

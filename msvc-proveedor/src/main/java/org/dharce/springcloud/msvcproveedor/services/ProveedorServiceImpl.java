@@ -157,14 +157,9 @@ public class ProveedorServiceImpl implements  ProveedorService{
         if(o.isPresent()){
             Insumo insumoMsvc = insumoClientRest.detalle(insumo.getId());
             Proveedor proveedor = o.get();
-            //aca va la validacion
+
             ProveedorInsumo proveedorInsumo = new ProveedorInsumo();
             proveedorInsumo.setInsumoId(insumoMsvc.getId());
-            for (ProveedorArticulo cu : proveedor.getProveedorArticulos()) {
-                if(proveedorInsumo.getId() == cu.getId()){
-                    return Optional.empty();
-                }
-            }
             proveedor.addProveedorInsumo(proveedorInsumo);
 
             repository.save(proveedor);
