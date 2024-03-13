@@ -83,4 +83,10 @@ public class ArticuloController {
         });
         return ResponseEntity.badRequest().body(errores);
     }
+
+    @GetMapping("/articlo-por-proveedor")
+    public ResponseEntity<?> obtenerArticuloPorProveedor(@RequestParam List<Long> ids){
+        return  ResponseEntity.ok(service.listaPorIds(ids));
+
+    }
 }

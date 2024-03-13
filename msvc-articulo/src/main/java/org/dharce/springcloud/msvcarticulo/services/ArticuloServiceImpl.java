@@ -1,5 +1,6 @@
 package org.dharce.springcloud.msvcarticulo.services;
 
+import org.dharce.springcloud.msvcarticulo.clients.ProveedorClienteRest;
 import org.dharce.springcloud.msvcarticulo.models.entity.Articulo;
 import org.dharce.springcloud.msvcarticulo.repositories.ArticuloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import java.util.Optional;
 public class ArticuloServiceImpl implements ArticuloService {
     @Autowired // inyecta la dependencia de una clase que tiene metodos a otra clase
     private ArticuloRepository repository;
+
+    @Autowired
+    private ProveedorClienteRest proveedorClienteRest;
     @Override
     @Transactional
     public List<Articulo> listar() {
@@ -31,9 +35,21 @@ public class ArticuloServiceImpl implements ArticuloService {
     }
 
     @Override
+    @Transactional
     public void eliminar(Long id) {
         repository.deleteById(id);
+        proveedorClienteRest.eliminarProveedorArticuloPorId(id);
     }
+//    @Override
+//    public void eliminar(Long id) {
+//        repository.deleteById(id);
+//    }
     @Override
     public Optional<Articulo> porNombre(String name) {return repository.findByName(name);}
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Articulo> listaPorIds(Iterable<Long> ids) {
+        return (List<Articulo>) repository.findAllById(ids);
+    }
 }

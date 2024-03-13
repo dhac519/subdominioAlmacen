@@ -1,6 +1,9 @@
 package org.dharce.springcloud.msvcproveedor.controllers;
 
+import feign.FeignException;
 import jakarta.validation.Valid;
+import org.dharce.springcloud.msvcproveedor.models.Articulo;
+import org.dharce.springcloud.msvcproveedor.models.Insumo;
 import org.dharce.springcloud.msvcproveedor.models.entity.Proveedor;
 import org.dharce.springcloud.msvcproveedor.services.ProveedorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +86,104 @@ public class ProveedorController {
             errores.put(err.getField(), "Error!!! " + err.getField() + " " + err.getDefaultMessage());
         });
         return ResponseEntity.badRequest().body(errores);
+    }
+
+    // Articulo
+    @PostMapping("/crear-articulo/{proveedorId}")
+    public ResponseEntity<?> crearArticulo(@RequestBody Articulo articulo, @PathVariable Long proveedorId){
+        Optional<Articulo> o;
+        try {
+            o=service.crearArticulo(articulo,proveedorId);
+        }catch (FeignException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap(
+                    "mensaje","No se creó el Articulo o error en la comunicación: "+
+                            e.getMessage()
+            ));
+        }
+        if(o.isPresent()){
+            return  ResponseEntity.status(HttpStatus.CREATED).body(o.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/desasignar-articulo/{proveedorId}")
+    public ResponseEntity<?> eliminarArticulo(@RequestBody Articulo articulo,@PathVariable Long proveedorId){
+        Optional<Articulo> o ;
+        try {
+            o = service.eliminarArticulo(articulo,proveedorId);
+        }catch (FeignException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap(
+                    "mensaje","No existe el Articulo o error en la comunicación"+
+                            e.getMessage()
+            ));
+        }
+        if(o.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(o.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/proArt/{id}")
+    public ResponseEntity<?> detalleArticulo(@PathVariable Long id){
+        Optional<Proveedor> op = service.porIdConArticulo(id);
+        if(op.isPresent()){
+            return ResponseEntity.ok(op.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/eliminar-proart/{id}")
+    public void eliminarProveedorArticuloPorId(@PathVariable Long id){
+        service.eliminarProveedorArticuloPorId(id);
+    }
+
+    //Insumo
+
+    @PostMapping("/crear-insumo/{proveedorId}")
+    public ResponseEntity<?> crearInsumo(@RequestBody Insumo insumo, @PathVariable Long proveedorId){
+        Optional<Insumo> o;
+        try {
+            o = service.crearInsumo(insumo,proveedorId);
+        }catch (FeignException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap(
+                    "mensaje","No se creó el Insumo o error en la comunicación: "+
+                            e.getMessage()
+            ));
+        }
+        if(o.isPresent()){
+            return  ResponseEntity.status(HttpStatus.CREATED).body(o.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/desasignar-articulo/{proveedorId}")
+    public ResponseEntity<?> eliminarInsumo(@RequestBody Insumo insumo,@PathVariable Long proveedorId){
+        Optional<Insumo> o ;
+        try {
+            o = service.eliminarInsumo(insumo,proveedorId);
+        }catch (FeignException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap(
+                    "mensaje","No existe el Insumo o error en la comunicación"+
+                            e.getMessage()
+            ));
+        }
+        if(o.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(o.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/proInsu/{id}")
+    public ResponseEntity<?> detalleProIns(@PathVariable Long id){
+        Optional<Proveedor> op = service.porIdConInsumo(id);
+        if(op.isPresent()){
+            return ResponseEntity.ok(op.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("eliminar-proins/{id}")
+    public void eliminarProveedorInsumoPorId(@PathVariable Long id){
+        service.eliminarProveedorInsumoPorId(id);
     }
 }

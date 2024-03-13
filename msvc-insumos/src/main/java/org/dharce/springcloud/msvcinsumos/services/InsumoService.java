@@ -12,4 +12,8 @@ public interface InsumoService {
     void eliminar(Long id);
 
     Optional<Insumo> porNombre(String name);
+
+    //Metodos remotos
+
+    List<Insumo> listaPorIds(Iterable<Long> ids);
 }

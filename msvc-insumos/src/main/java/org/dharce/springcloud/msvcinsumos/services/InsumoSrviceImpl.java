@@ -1,5 +1,6 @@
 package org.dharce.springcloud.msvcinsumos.services;
 
+import org.dharce.springcloud.msvcinsumos.clients.ProveedorClienteRest;
 import org.dharce.springcloud.msvcinsumos.models.entity.Insumo;
 import org.dharce.springcloud.msvcinsumos.repositories.InsumoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import java.util.Optional;
 public class InsumoSrviceImpl implements InsumoService{
     @Autowired // inyecta la dependencia de una clase que tiene metodos a otra clase
     private InsumoRepository repository;
+    @Autowired
+    private ProveedorClienteRest proveedorClienteRest;
     @Override
     @Transactional
     public List<Insumo> listar() {
@@ -30,10 +33,22 @@ public class InsumoSrviceImpl implements InsumoService{
     }
 
     @Override
+    @Transactional
     public void eliminar(Long id) {
         repository.deleteById(id);
+        proveedorClienteRest.eliminarProveedorInsumoPorId(id);
     }
+//    @Override
+//    public void eliminar(Long id) {
+//        repository.deleteById(id);
+//    }
 
     @Override
     public Optional<Insumo> porNombre(String name) {return repository.findByName(name);}
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Insumo> listaPorIds(Iterable<Long> ids) {
+        return (List<Insumo>) repository.findAllById(ids);
+    }
 }

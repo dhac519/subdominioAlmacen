@@ -12,4 +12,8 @@ public interface ArticuloService {
     void eliminar(Long id);
 
     Optional<Articulo> porNombre(String name);
+
+    //Metodos remotos
+
+    List<Articulo> listaPorIds(Iterable<Long> ids);
 }
